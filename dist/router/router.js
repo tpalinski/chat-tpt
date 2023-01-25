@@ -7,5 +7,5 @@ exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 exports.router = (0, express_1.default)();
 exports.router.use("/", (req, res) => {
-    res.send("Api is running, to use api type other commands");
+    res.status(200).send("Api is running, to use api type other commands");
 });
