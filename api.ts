@@ -28,11 +28,9 @@ const io: Server = require('socket.io')(server, {
 
 // websocket logic
 io.on('connection', (socket) => {
-    console.log("Connected to websocket")
 
     socket.on("join-room", (params: RoomParams, callback) => {
       socket.join(params.room)
-      console.log(`${socket.id} joined room ${params.room} as ${params.username}`)
       callback({
         status: "ok"
       })
@@ -40,7 +38,6 @@ io.on('connection', (socket) => {
 
     socket.on("send-message", (message: string) => {
       let room = [...socket.rooms][1]; // The name of the first and only room that the user joins
-      console.log(`Sending message: ${message} to room: ${room}`)
       io.to(room).emit("message", message)
     })
 })
