@@ -19,11 +19,6 @@ app.use(logger);
 app.use((0, cors_1.default)());
 // websocket setup
 const io = new socket_io_1.Server(server);
-app.use((req, res, next) => {
-    //@ts-ignore
-    req.io = io; // forward ws connection
-    next();
-});
 io.on('connection', (ws) => {
     console.log("Connected to websocket");
 });
