@@ -32,6 +32,10 @@ io.on('connection', (socket) => {
             status: "ok"
         });
     });
+    socket.on("send-message", (message) => {
+        let room = [...socket.rooms][1]; // The name of the first and only room that the user joins
+        socket.to(room).emit("message", message);
+    });
 });
 app.use(router_1.router);
 server.listen(port, () => {
