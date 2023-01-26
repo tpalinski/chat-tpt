@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 exports.router = (0, express_1.default)();
-exports.router.use("/", (req, res) => {
-    res.status(200).send("Api is running, to use api type other commands");
+exports.router.all("/", (req, res, next) => {
+    res.redirect(301, "/api");
+});
+exports.router.use("/api", (req, res) => {
+    res.status(200).send("Refer to the documentation for all the endpoints");
 });
