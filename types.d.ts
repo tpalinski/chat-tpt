@@ -1,0 +1,1 @@
+type RoomParams = {username: string, room: string}

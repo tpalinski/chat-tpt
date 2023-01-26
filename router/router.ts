@@ -2,10 +2,8 @@ import express, {Express, Request, Response} from "express";
 
 export const router = express();
 
-router.all("/", (req: Request, res: Response, next) => {
-    res.redirect(301, "/api");
+router.all("/", (req: Request, res: Response) => {
+    res.status(404).send("Should be using WebSockets for this")
 });
 
-router.use("/api", (req: Request, res: Response) => {
-    res.status(200).send("Refer to the documentation for all the endpoints")
-});
+

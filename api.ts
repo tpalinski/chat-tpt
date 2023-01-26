@@ -10,18 +10,33 @@ dotenv.config()
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
-const server = http.createServer(app);
+
 
 const logger = morgan('dev');
 
 app.use(logger);
 app.use(cors());
 
-// websocket setup
-const io = new Server(server);
+const server = http.createServer(app);
 
-io.on('connection', (ws) => {
+// websocket setup
+const io: Server = require('socket.io')(server, {
+    cors: {
+      origin: '*',
+    }
+  });
+
+// websocket logic
+io.on('connection', (socket) => {
     console.log("Connected to websocket")
+
+    socket.on("join-room", (params: RoomParams, callback) => {
+      socket.join(params.room)
+      console.log(`${socket.id} joined room ${params.room} as ${params.username}`)
+      callback({
+        status: "ok"
+      })
+    });
 })
 
 
