@@ -40,7 +40,8 @@ io.on('connection', (socket) => {
 
     socket.on("send-message", (message: string) => {
       let room = [...socket.rooms][1]; // The name of the first and only room that the user joins
-      socket.to(room).emit("message", message)
+      console.log(`Sending message: ${message} to room: ${room}`)
+      io.to(room).emit("message", message)
     })
 })
 
