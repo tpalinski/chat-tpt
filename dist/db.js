@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertUser = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -27,18 +31,28 @@ function connectToDatabase() {
     });
 }
 exports.connectToDatabase = connectToDatabase;
-function insertUser() {
+const testUser = {
+    email: 'test@tes.com',
+    nickname: 'Testowy Gosciu',
+    password: 'Fajne',
+};
+function insertUser(user = testUser) {
     return __awaiter(this, void 0, void 0, function* () {
         yield client.connect();
         const db = client.db('chat-tpt');
         const collection = db.collection('users');
-        const testUser = {
-            email: 'test@tes.com',
-            nickname: 'Testowy Gosciu',
-            password: 'Fajne',
-        };
-        const insertResult = yield collection.insertOne(testUser);
+        user = yield hashPassword(user);
+        const insertResult = yield collection.insertOne(user);
         console.log(insertResult);
     });
 }
 exports.insertUser = insertUser;
+/// Hash user's password using bcrypt
+function hashPassword(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let password = user.password;
+        const salt = yield bcrypt_1.default.genSalt();
+        user.password = yield bcrypt_1.default.hash(password, salt);
+        return user;
+    });
+}
