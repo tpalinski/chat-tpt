@@ -7,3 +7,9 @@ export class UserInsertionError extends Error {
         this.name = "UserInsertionError"
     }
 }
+
+export class EmailExistsError extends Error {
+    constructor() {
+        super("Email already in use");
+    }
+}

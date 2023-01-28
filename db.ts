@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion} from 'mongodb'
 import bcrypt from "bcrypt";
-import { UserInsertionError } from './error';
+import {  EmailExistsError} from './error';
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -42,7 +42,7 @@ export async function insertUser(user: User = testUser) {
   const collection = db.collection('users')
   let canInsert = await checkIfExists(user);
   if(!canInsert){
-    throw new UserInsertionError("User already exists!")
+    throw new EmailExistsError
   }
   user = await hashPassword(user);
   const insertResult = await collection.insertOne(user);

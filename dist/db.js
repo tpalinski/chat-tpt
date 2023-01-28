@@ -53,7 +53,7 @@ function insertUser(user = testUser) {
         const collection = db.collection('users');
         let canInsert = yield checkIfExists(user);
         if (!canInsert) {
-            throw new error_1.UserInsertionError("User already exists!");
+            throw new error_1.EmailExistsError;
         }
         user = yield hashPassword(user);
         const insertResult = yield collection.insertOne(user);

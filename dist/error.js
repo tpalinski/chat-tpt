@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserInsertionError = void 0;
+exports.EmailExistsError = exports.UserInsertionError = void 0;
 /**
  * Error thrown while performing checks concerning database insertion
  */
@@ -11,3 +11,9 @@ class UserInsertionError extends Error {
     }
 }
 exports.UserInsertionError = UserInsertionError;
+class EmailExistsError extends Error {
+    constructor() {
+        super("Email already in use");
+    }
+}
+exports.EmailExistsError = EmailExistsError;

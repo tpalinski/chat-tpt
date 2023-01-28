@@ -18,7 +18,9 @@ const port = process.env.PORT || 3001;
     .then((res) => {
     console.log(res);
 })
-    .catch(console.error);
+    .catch((reason) => {
+    console.log(reason);
+});
 const logger = (0, morgan_1.default)('dev');
 app.use(logger);
 app.use((0, cors_1.default)());
