@@ -5,11 +5,13 @@ import http from "http";
 import morgan from "morgan";
 import cors from "cors";
 import { Server } from "socket.io";
+import { connectToDatabase } from './db';
 
 dotenv.config()
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
+connectToDatabase();
 
 
 const logger = morgan('dev');
