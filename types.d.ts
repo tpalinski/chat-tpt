@@ -5,3 +5,4 @@ type User = {
     password: string,
     friends?: User[]
 }
+
