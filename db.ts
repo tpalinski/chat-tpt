@@ -5,9 +5,15 @@ const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?
 //@ts-ignore
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-export async function connectToDatabase(){
-    client.connect().then((res) => {
-      console.log("Connected to database ")
+
+
+export function connectToDatabase(){
+    client.connect()
+    .then((client) => {
+      console.log("Database connection works")
     })
-    
+    .catch((error) => {
+      console.log(error)
+      process.exit();
+    })
 }
