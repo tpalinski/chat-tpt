@@ -20,6 +20,10 @@ const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
 //@ts-ignore
 const client = new mongodb_1.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: mongodb_1.ServerApiVersion.v1 });
+/**
+ * Checks whwther a connection to the database can be established
+ * and closes the server if such connection cannot be made
+ */
 function connectToDatabase() {
     client.connect()
         .then((client) => {
@@ -36,6 +40,12 @@ const testUser = {
     nickname: 'Testowy Gosciu',
     password: 'Fajne',
 };
+/** Attempts to insert a User object into the database
+ *
+ * @param user
+ * A User object which is to be inserted into the database
+ *
+ */
 function insertUser(user = testUser) {
     return __awaiter(this, void 0, void 0, function* () {
         yield client.connect();
@@ -43,11 +53,16 @@ function insertUser(user = testUser) {
         const collection = db.collection('users');
         user = yield hashPassword(user);
         const insertResult = yield collection.insertOne(user);
-        console.log(insertResult);
+        return insertResult;
     });
 }
 exports.insertUser = insertUser;
-/// Hash user's password using bcrypt
+/** Returns a User object with a hashed password
+ * @param {User} user
+ * User object with its password in raw text form
+ * @returns {Promise<User>}
+ *
+ * */
 function hashPassword(user) {
     return __awaiter(this, void 0, void 0, function* () {
         let password = user.password;
