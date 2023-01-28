@@ -12,6 +12,11 @@ dotenv.config()
 const app: Express = express();
 const port = process.env.PORT || 3001;
 connectToDatabase();
+insertUser()
+  .then((res) => {
+    console.log(res)
+  })
+  .catch(console.error)
 
 
 const logger = morgan('dev');

@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertUser = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const error_1 = require("./error");
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -44,15 +45,19 @@ const testUser = {
  *
  * @param user
  * A User object which is to be inserted into the database
- *
+ * @throws {UserInsertionError}
  */
 function insertUser(user = testUser) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield client.connect();
         const db = client.db('chat-tpt');
         const collection = db.collection('users');
+        let canInsert = yield checkIfExists(user);
+        if (!canInsert) {
+            throw new error_1.UserInsertionError("User already exists!");
+        }
         user = yield hashPassword(user);
         const insertResult = yield collection.insertOne(user);
+        console.log(insertResult);
         return insertResult;
     });
 }
@@ -69,5 +74,21 @@ function hashPassword(user) {
         const salt = yield bcrypt_1.default.genSalt();
         user.password = yield bcrypt_1.default.hash(password, salt);
         return user;
+    });
+}
+/** Checks if user with such email exists in the database
+ *
+ * @param user
+ * User object to be checked
+ *
+ */
+function checkIfExists(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = client.db('chat-tpt');
+        const collection = db.collection('users');
+        const query = { email: user.email };
+        const findResult = yield collection.find(query).toArray();
+        console.log('Found documents =>', findResult);
+        return !findResult.length;
     });
 }
