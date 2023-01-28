@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb'
+import { Collection, MongoClient, ServerApiVersion} from 'mongodb'
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -17,3 +17,21 @@ export function connectToDatabase(){
       process.exit();
     })
 }
+
+
+
+
+export async function insertUser() {
+  await client.connect()
+  const db = client.db('chat-tpt')
+  const collection = db.collection('users')
+  const testUser: User = {
+    email: 'test@tes.com',
+    nickname: 'Testowy Gosciu',
+    password: 'Fajne',
+  }
+  const insertResult = await collection.insertOne(testUser);
+  console.log(insertResult);
+}
+
+
