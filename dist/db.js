@@ -18,15 +18,15 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
-//@ts-ignore
+//@ts-expect-error - useNewUrlParser not detected as a property on MongoClientOptions
 const client = new mongodb_1.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: mongodb_1.ServerApiVersion.v1 });
 /**
- * Checks whwther a connection to the database can be established
+ * Checks whether a connection to the database can be established
  * and closes the server if such connection cannot be made
  */
 function connectToDatabase() {
     client.connect()
-        .then((client) => {
+        .then(() => {
         console.log("Database connection works");
     })
         .catch((error) => {
