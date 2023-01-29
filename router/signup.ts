@@ -46,7 +46,11 @@ userRouter.get("/", async (req: Request, res: Response) => {
     //@ts-expect-error - user parameter attached in userParser
     let user = await getUser(req.user);
     if(user){
-        res.status(200).send(user)
+        let response = {
+            email: user.email,
+            nickname: user.nickname,
+        }
+        res.status(200).send(response)
     } else {
         return res.status(404).send("No such user found")
     }

@@ -28,6 +28,11 @@ const invalidUser = {
     nickname: "",
     password: ""
 };
+const nonUser = {
+    email: "tfahfadhfa",
+    nickname: "hafdhfads",
+    password: "qwerty123"
+};
 describe("GET /", () => {
     test("Should return status: 404", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(baseURL).get("/");
@@ -61,5 +66,34 @@ describe("POST /user/signup", () => {
             .post("/user/signup")
             .send(invalidUser);
         expect(response.status).toBe(400);
+    }));
+});
+describe("GET /user", () => {
+    test("Should return status 400 with no user attached", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .get("/user")
+            .send({});
+        expect(response.status).toBe(400);
+    }));
+    test("Should return status 404 with user who is not in the database", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .get("/user")
+            .send(nonUser);
+        expect(response.status).toBe(404);
+    }));
+    test("Should return status 200 with user who is in the database", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .get("/user")
+            .send(validUser);
+        expect(response.status).toBe(200);
+    }));
+    test("Should return information about the user", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .get("/user")
+            .send(validUser);
+        expect(response.body).toEqual({
+            email: validUser.email,
+            nickname: validUser.nickname,
+        });
     }));
 });

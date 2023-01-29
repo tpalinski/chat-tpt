@@ -53,7 +53,11 @@ exports.userRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, func
     //@ts-expect-error - user parameter attached in userParser
     let user = yield (0, db_1.getUser)(req.user);
     if (user) {
-        res.status(200).send(user);
+        let response = {
+            email: user.email,
+            nickname: user.nickname,
+        };
+        res.status(200).send(response);
     }
     else {
         return res.status(404).send("No such user found");
