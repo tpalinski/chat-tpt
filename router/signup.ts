@@ -41,3 +41,13 @@ userRouter.post('/signup', signupCheck, async (req: Request, res: Response) => {
     let result = await insertUser(user as User);
     res.status(201).send("User successfully signed up")
 })
+
+userRouter.get("/", async (req: Request, res: Response) => {
+    //@ts-expect-error - user parameter attached in userParser
+    let user = await getUser(req.user);
+    if(user){
+        res.status(200).send(user)
+    } else {
+        return res.status(404).send("No such user found")
+    }
+})

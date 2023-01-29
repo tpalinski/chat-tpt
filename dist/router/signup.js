@@ -49,3 +49,13 @@ exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, 
     let result = yield (0, db_1.insertUser)(user);
     res.status(201).send("User successfully signed up");
 }));
+exports.userRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //@ts-expect-error - user parameter attached in userParser
+    let user = yield (0, db_1.getUser)(req.user);
+    if (user) {
+        res.status(200).send(user);
+    }
+    else {
+        return res.status(404).send("No such user found");
+    }
+}));
