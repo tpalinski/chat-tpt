@@ -12,10 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertUser = exports.connectToDatabase = void 0;
+exports.deleteUser = exports.checkIfExists = exports.insertUser = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const error_1 = require("./error");
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -51,13 +50,8 @@ function insertUser(user = testUser) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = client.db('chat-tpt');
         const collection = db.collection('users');
-        let canInsert = yield checkIfExists(user);
-        if (!canInsert) {
-            throw new error_1.EmailExistsError;
-        }
         user = yield hashPassword(user);
         const insertResult = yield collection.insertOne(user);
-        console.log(insertResult);
         return insertResult;
     });
 }
@@ -92,3 +86,19 @@ function checkIfExists(user) {
         return !findResult.length;
     });
 }
+exports.checkIfExists = checkIfExists;
+/** Deletes user form the database
+ *
+ * @param user
+ * User to be deleted
+ */
+function deleteUser(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = client.db('chat-tpt');
+        const collection = db.collection('users');
+        const query = { email: user.email };
+        const findResult = yield collection.find(query).toArray();
+        findResult.forEach((user) => collection.deleteOne(user._id));
+    });
+}
+exports.deleteUser = deleteUser;

@@ -1,9 +1,12 @@
 import express, {Express, Request, Response} from "express";
+import { userRouter } from "./signup";
 
 export const router = express();
 
-router.all("/", (req: Request, res: Response) => {
-    res.status(404).send("Should be using WebSockets for this")
+router.use("/user", userRouter);
+
+router.use("/", (req: Request, res: Response) => {
+    res.status(404).send()
 });
 
 

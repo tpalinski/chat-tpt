@@ -6,20 +6,13 @@ import morgan from "morgan";
 import cors from "cors";
 import { Server } from "socket.io";
 import { connectToDatabase, insertUser } from './db';
-import { EmailExistsError } from './error';
+import { EmailExistsError } from './util/error';
 
 dotenv.config()
 
 const app: Express = express();
 const port = process.env.PORT || 3001;
 connectToDatabase();
-insertUser()
-  .then((res) => {
-    console.log(res)
-  })
-  .catch((reason) => {
-    console.log(reason)
-  })
 
 
 const logger = morgan('dev');

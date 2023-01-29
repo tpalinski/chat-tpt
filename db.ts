@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion} from 'mongodb'
 import bcrypt from "bcrypt";
-import {  EmailExistsError} from './error';
+import {  EmailExistsError} from './util/error';
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
@@ -38,15 +38,13 @@ const testUser: User = {
  */
 
 export async function insertUser(user: User = testUser) {
+
   const db = client.db('chat-tpt')
   const collection = db.collection('users')
-  let canInsert = await checkIfExists(user);
-  if(!canInsert){
-    throw new EmailExistsError
-  }
+
   user = await hashPassword(user);
+
   const insertResult = await collection.insertOne(user);
-  console.log(insertResult)
   return insertResult
 }
 
@@ -71,7 +69,7 @@ async function hashPassword(user: User): Promise<User> {
  * User object to be checked
  * 
  */
-async function checkIfExists(user: User): Promise<boolean> {
+export async function checkIfExists(user: User): Promise<boolean> {
   const db = client.db('chat-tpt')
   const collection = db.collection('users')
   const query = {email: user.email}
@@ -79,5 +77,21 @@ async function checkIfExists(user: User): Promise<boolean> {
   console.log('Found documents =>', findResult);
   return !findResult.length
 }
+
+
+/** Deletes user form the database
+ * 
+ * @param user 
+ * User to be deleted
+ */
+export async function deleteUser(user: User) {
+  const db = client.db('chat-tpt')
+  const collection = db.collection('users')
+  const query = {email: user.email}
+  const findResult = await collection.find(query).toArray();
+  findResult.forEach((user) => collection.deleteOne(user._id));
+}
+
+
 
 

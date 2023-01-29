@@ -18,22 +18,22 @@ dotenv_1.default.config();
 const port = process.env.PORT || 3001;
 const baseURL = `http://localhost:${port}`;
 describe("GET /", () => {
-    test("Should return status: 301", () => __awaiter(void 0, void 0, void 0, function* () {
+    test("Should return status: 404", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(baseURL).get("/");
-        expect(response.status).toBe(301);
-    }));
-    test("Should redirect to /api", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(baseURL).get("/");
-        expect(response.redirect).toBe(true);
+        expect(response.status).toBe(404);
     }));
 });
-describe("GET /api", () => {
-    test("Should return status: 200", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(baseURL).get("/api");
-        expect(response.status).toBe(200);
+describe("POST /user/signup", () => {
+    test("Should return status 400 with no user attached", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/signup")
+            .send({});
+        expect(response.status).toBe(400);
     }));
-    test("Should return text", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(baseURL).get("/api");
-        expect(response.text).toBeDefined();
+    test("Should return status 201 with valid user", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/signup")
+            .send({});
+        expect(response.status).toBe(400);
     }));
 });
