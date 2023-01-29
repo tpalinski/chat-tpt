@@ -50,6 +50,8 @@ userRouter.get("/me", (req: Request, res: Response) => {
     if(req.session.user) {
         //@ts-expect-error
         res.status(200).send(req.session.user as User)
+    } else {
+        res.status(401).send("Client not logged in")
     }
 })
 

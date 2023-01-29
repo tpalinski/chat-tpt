@@ -56,6 +56,9 @@ exports.userRouter.get("/me", (req, res) => {
         //@ts-expect-error
         res.status(200).send(req.session.user);
     }
+    else {
+        res.status(401).send("Client not logged in");
+    }
 });
 exports.userRouter.use(userParser);
 exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
