@@ -14,9 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const supertest_1 = __importDefault(require("supertest"));
+const db_1 = require("../db");
 dotenv_1.default.config();
 const port = process.env.PORT || 3001;
 const baseURL = `http://localhost:${port}`;
+const validUser = {
+    email: "testingUser@test.com",
+    nickname: "Hejur",
+    password: "qwerty123"
+};
 describe("GET /", () => {
     test("Should return status: 404", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(baseURL).get("/");
@@ -31,9 +37,10 @@ describe("POST /user/signup", () => {
         expect(response.status).toBe(400);
     }));
     test("Should return status 201 with valid user", () => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, db_1.deleteUser)(validUser).catch(console.error);
         const response = yield (0, supertest_1.default)(baseURL)
             .post("/user/signup")
-            .send({});
-        expect(response.status).toBe(400);
+            .send(validUser);
+        expect(response.status).toBe(201);
     }));
 });

@@ -74,8 +74,7 @@ export async function checkIfExists(user: User): Promise<boolean> {
   const collection = db.collection('users')
   const query = {email: user.email}
   const findResult = await collection.find(query).toArray();
-  console.log('Found documents =>', findResult);
-  return !findResult.length
+  return !(!findResult.length)
 }
 
 
@@ -89,7 +88,7 @@ export async function deleteUser(user: User) {
   const collection = db.collection('users')
   const query = {email: user.email}
   const findResult = await collection.find(query).toArray();
-  findResult.forEach((user) => collection.deleteOne(user._id));
+  findResult.forEach((user) => collection.deleteOne({_id: user._id}));
 }
 
 

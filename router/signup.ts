@@ -8,10 +8,11 @@ export const userRouter = express();
 
 
 const userParser = (req: Request, res: Response, next: NextFunction) => {
-    if(req.body == undefined || !req.body.hasOwnProperty("user")) {
-        res.status(400).send("No user object posted")
+    if(!req.body.hasOwnProperty("email")) {
+        return res.status(400).send("No user object posted")
     }
-    let user = req.body.user;
+    console.log(req.body)
+    let user = req.body;
     //@ts-expect-error - attaching user parameter to the request
     req.user = user;
     next();
@@ -19,20 +20,19 @@ const userParser = (req: Request, res: Response, next: NextFunction) => {
 
 userRouter.use(userParser);
 
-const signupCheck = (req: Request, res: Response, next: NextFunction) => {
+const signupCheck = async (req: Request, res: Response, next: NextFunction) => {
     ///@ts-expect-error - user parameter attached in userParser
     let user = req.user;
     user = isValidForSignup(user);
     if(!user) {
-        res.status(400).send("Invalid user object")
+        return res.status(400).send("Invalid user object")
     }
-    checkIfExists(user as User).then((userExists) => {
-        if(!userExists){
-            next();
-        } else {
-            res.status(418).send("User already exists")
-        }
-    })
+    let userExists = await checkIfExists(user as User)
+    if(!userExists){
+        next();
+    } else {
+        return res.status(418).send("User already exists")
+    }
 }
 
 userRouter.post('/signup', signupCheck, async (req: Request, res: Response) => {

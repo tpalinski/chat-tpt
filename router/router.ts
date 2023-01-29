@@ -5,7 +5,7 @@ export const router = express();
 
 router.use("/user", userRouter);
 
-router.use("/", (req: Request, res: Response) => {
+router.get("/", (req: Request, res: Response) => {
     res.status(404).send()
 });
 

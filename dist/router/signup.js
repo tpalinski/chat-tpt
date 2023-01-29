@@ -18,31 +18,31 @@ const db_1 = require("../db");
 const user_1 = require("../util/user");
 exports.userRouter = (0, express_1.default)();
 const userParser = (req, res, next) => {
-    if (req.body == undefined || !req.body.hasOwnProperty("user")) {
-        res.status(400).send("No user object posted");
+    if (!req.body.hasOwnProperty("email")) {
+        return res.status(400).send("No user object posted");
     }
-    let user = req.body.user;
+    console.log(req.body);
+    let user = req.body;
     //@ts-expect-error - attaching user parameter to the request
     req.user = user;
     next();
 };
 exports.userRouter.use(userParser);
-const signupCheck = (req, res, next) => {
+const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     ///@ts-expect-error - user parameter attached in userParser
     let user = req.user;
     user = (0, user_1.isValidForSignup)(user);
     if (!user) {
-        res.status(400).send("Invalid user object");
+        return res.status(400).send("Invalid user object");
     }
-    (0, db_1.checkIfExists)(user).then((userExists) => {
-        if (!userExists) {
-            next();
-        }
-        else {
-            res.status(418).send("User already exists");
-        }
-    });
-};
+    let userExists = yield (0, db_1.checkIfExists)(user);
+    if (!userExists) {
+        next();
+    }
+    else {
+        return res.status(418).send("User already exists");
+    }
+});
 exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-expect-error - user parameter attached in userParser
     let user = req.user;

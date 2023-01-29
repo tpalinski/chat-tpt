@@ -4,7 +4,7 @@
   "description": "",
   "main": "api.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "build": "npx tsc",
     "start": "node dist/api.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/api.js\""
