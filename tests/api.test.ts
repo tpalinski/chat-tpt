@@ -101,3 +101,24 @@ describe("GET /user", () => {
         })
     })
 })
+
+describe("POST /user/login", () => {
+
+    test("Should return status 400 with no user attached", async () => {
+        const response = await request(baseURL)
+            .post("/user/login")
+            .send({})
+        expect(response.status).toBe(400);
+    })
+
+    test("Should return status 200 with good credentials", async () => {
+        const response = await request(baseURL)
+            .post("/user/login")
+            .send({
+                email: validUser.email,
+                password: validUser.password
+            })
+        expect(response.status).toBe(200);
+    })
+
+})

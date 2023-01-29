@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { getUser, hashPassword, insertUser } from "../db";
 import { isValidForLogin, isValidForSignup } from "../util/user";
-import { router } from "./router";
+import bcrypt from "bcrypt";
 
 
 export const userRouter = express();
@@ -64,8 +64,7 @@ userRouter.post('/login', async (req: Request, res: Response) => {
     if(!dbUser){
         return res.status(404).send("This user does not exist")
     }
-    let hashedUser = await hashPassword(user);
-    if(hashedUser.password === dbUser.password) {
+    if(await bcrypt.compare(user.password, dbUser.password)) {
         res.status(200).send("Successfully logged in")
     } else {
         res.status(400).send("Wrong credentials")

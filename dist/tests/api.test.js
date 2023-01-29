@@ -97,3 +97,20 @@ describe("GET /user", () => {
         });
     }));
 });
+describe("POST /user/login", () => {
+    test("Should return status 400 with no user attached", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/login")
+            .send({});
+        expect(response.status).toBe(400);
+    }));
+    test("Should return status 200 with good credentials", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/login")
+            .send({
+            email: validUser.email,
+            password: validUser.password
+        });
+        expect(response.status).toBe(200);
+    }));
+});

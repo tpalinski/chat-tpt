@@ -16,6 +16,7 @@ exports.userRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const db_1 = require("../db");
 const user_1 = require("../util/user");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 exports.userRouter = (0, express_1.default)();
 const userParser = (req, res, next) => {
     if (!req.body.hasOwnProperty("email")) {
@@ -66,8 +67,7 @@ exports.userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0
     if (!dbUser) {
         return res.status(404).send("This user does not exist");
     }
-    let hashedUser = yield (0, db_1.hashPassword)(user);
-    if (hashedUser.password === dbUser.password) {
+    if (yield bcrypt_1.default.compare(user.password, dbUser.password)) {
         res.status(200).send("Successfully logged in");
     }
     else {
