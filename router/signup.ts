@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { checkIfExists, insertUser } from "../db";
+import { getUser, insertUser } from "../db";
 import { isValidForSignup } from "../util/user";
 import { router } from "./router";
 
@@ -27,7 +27,7 @@ const signupCheck = async (req: Request, res: Response, next: NextFunction) => {
     if(!user) {
         return res.status(400).send("Invalid user object")
     }
-    let userExists = await checkIfExists(user as User)
+    let userExists = await getUser(user as User)
     if(!userExists){
         next();
     } else {

@@ -35,7 +35,7 @@ const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     if (!user) {
         return res.status(400).send("Invalid user object");
     }
-    let userExists = yield (0, db_1.checkIfExists)(user);
+    let userExists = yield (0, db_1.getUser)(user);
     if (!userExists) {
         next();
     }

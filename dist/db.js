@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.checkIfExists = exports.insertUser = exports.connectToDatabase = void 0;
+exports.deleteUser = exports.getUser = exports.insertUser = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 require('dotenv').config();
@@ -71,21 +71,27 @@ function hashPassword(user) {
     });
 }
 /** Checks if user with such email exists in the database
+ * and returns User object if it does
  *
  * @param user
  * User object to be checked
  *
  */
-function checkIfExists(user) {
+function getUser(user) {
     return __awaiter(this, void 0, void 0, function* () {
         const db = client.db('chat-tpt');
         const collection = db.collection('users');
         const query = { email: user.email };
-        const findResult = yield collection.find(query).toArray();
-        return !(!findResult.length);
+        const findResult = yield collection.findOne(query);
+        if (findResult) {
+            return findResult;
+        }
+        else {
+            return null;
+        }
     });
 }
-exports.checkIfExists = checkIfExists;
+exports.getUser = getUser;
 /** Deletes user from the database
  *
  * @param user

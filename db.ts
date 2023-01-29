@@ -64,17 +64,22 @@ async function hashPassword(user: User): Promise<User> {
 }
 
 /** Checks if user with such email exists in the database
+ * and returns User object if it does
  * 
  * @param user 
  * User object to be checked
  * 
  */
-export async function checkIfExists(user: User): Promise<boolean> {
+export async function getUser(user: User): Promise<User | null> {
   const db = client.db('chat-tpt')
   const collection = db.collection('users')
   const query = {email: user.email}
-  const findResult = await collection.find(query).toArray();
-  return !(!findResult.length)
+  const findResult: unknown = await collection.findOne(query)
+  if(findResult) {
+    return findResult as User
+  } else {
+    return null
+  }
 }
 
 
