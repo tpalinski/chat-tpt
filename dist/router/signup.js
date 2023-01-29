@@ -28,6 +28,12 @@ const userParser = (req, res, next) => {
     next();
 };
 exports.userRouter.use(userParser);
+/** Check if user is eligible for signup
+ * @param req.user
+ * User object attached to the request
+ *
+ * @returns
+ */
 const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     ///@ts-expect-error - user parameter attached in userParser
     let user = req.user;

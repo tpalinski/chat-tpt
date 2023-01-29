@@ -20,6 +20,12 @@ const userParser = (req: Request, res: Response, next: NextFunction) => {
 
 userRouter.use(userParser);
 
+/** Check if user is eligible for signup
+ * @param req.user
+ * User object attached to the request
+ *
+ * @returns 
+ */
 const signupCheck = async (req: Request, res: Response, next: NextFunction) => {
     ///@ts-expect-error - user parameter attached in userParser
     let user = req.user;

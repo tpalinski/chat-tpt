@@ -71,11 +71,13 @@ function hashPassword(user) {
     });
 }
 /** Checks if user with such email exists in the database
- * and returns User object if it does
  *
  * @param user
  * User object to be checked
  *
+ * @returns
+ * User if user exists,
+ * null if no user was found
  */
 function getUser(user) {
     return __awaiter(this, void 0, void 0, function* () {
