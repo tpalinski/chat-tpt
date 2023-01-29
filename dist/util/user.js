@@ -11,7 +11,15 @@ const isValidForSignup = (user) => {
     if (user.hasOwnProperty("email") &&
         user.hasOwnProperty("nickname") &&
         user.hasOwnProperty("password")) {
-        return user;
+        let userObject = user;
+        if (userObject.email === "" ||
+            userObject.nickname === "" ||
+            userObject.password === "") {
+            return null;
+        }
+        else {
+            return userObject;
+        }
     }
     else {
         return null;

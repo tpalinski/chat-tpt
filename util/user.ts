@@ -10,7 +10,14 @@ export const isValidForSignup = (user: Object): User | null =>{
     if (user.hasOwnProperty("email") && 
         user.hasOwnProperty("nickname") &&
         user.hasOwnProperty("password")) {
-        return user as User;
+        let userObject = user as User;
+        if(userObject.email === "" ||
+            userObject.nickname === "" ||
+            userObject.password === "") {
+            return null;
+        } else {
+           return userObject; 
+        }
     } else {
         return null;
     }

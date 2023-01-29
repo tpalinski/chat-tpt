@@ -23,6 +23,11 @@ const validUser = {
     nickname: "Hejur",
     password: "qwerty123"
 };
+const invalidUser = {
+    email: "dgasgads",
+    nickname: "",
+    password: ""
+};
 describe("GET /", () => {
     test("Should return status: 404", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(baseURL).get("/");
@@ -30,6 +35,9 @@ describe("GET /", () => {
     }));
 });
 describe("POST /user/signup", () => {
+    beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
+        yield (0, db_1.deleteUser)(validUser);
+    }));
     test("Should return status 400 with no user attached", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(baseURL)
             .post("/user/signup")
@@ -37,10 +45,21 @@ describe("POST /user/signup", () => {
         expect(response.status).toBe(400);
     }));
     test("Should return status 201 with valid user", () => __awaiter(void 0, void 0, void 0, function* () {
-        yield (0, db_1.deleteUser)(validUser).catch(console.error);
         const response = yield (0, supertest_1.default)(baseURL)
             .post("/user/signup")
             .send(validUser);
         expect(response.status).toBe(201);
+    }));
+    test("Should return status 418 with user who is already in the database", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/signup")
+            .send(validUser);
+        expect(response.status).toBe(418);
+    }));
+    test("Should return status 400 with invalid user object", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/signup")
+            .send(invalidUser);
+        expect(response.status).toBe(400);
     }));
 });
