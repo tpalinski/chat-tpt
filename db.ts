@@ -79,7 +79,7 @@ export async function checkIfExists(user: User): Promise<boolean> {
 }
 
 
-/** Deletes user form the database
+/** Deletes user from the database
  * 
  * @param user 
  * User to be deleted

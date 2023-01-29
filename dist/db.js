@@ -87,7 +87,7 @@ function checkIfExists(user) {
     });
 }
 exports.checkIfExists = checkIfExists;
-/** Deletes user form the database
+/** Deletes user from the database
  *
  * @param user
  * User to be deleted
