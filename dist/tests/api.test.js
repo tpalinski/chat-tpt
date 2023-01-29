@@ -113,4 +113,27 @@ describe("POST /user/login", () => {
         });
         expect(response.status).toBe(200);
     }));
+    test("Should return status 404 with non-existent user", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/login")
+            .send(nonUser);
+        expect(response.status).toBe(404);
+    }));
+    test("Should return status 400 with wrong credentials", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/login")
+            .send({
+            email: validUser.email,
+            password: "clearlywrongpassword"
+        });
+        expect(response.status).toBe(400);
+    }));
+    test("Should return status 400 with invalid user object", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(baseURL)
+            .post("/user/login")
+            .send({
+            password: "password"
+        });
+        expect(response.status).toBe(400);
+    }));
 });
