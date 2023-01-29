@@ -27,7 +27,6 @@ const userParser = (req, res, next) => {
     req.user = user;
     next();
 };
-exports.userRouter.use(userParser);
 /** Check if user is eligible for signup
  * @param req.user
  * User object attached to the request
@@ -49,11 +48,31 @@ const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         return res.status(418).send("User already exists");
     }
 });
+// Routing
+exports.userRouter.use(userParser);
 exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-expect-error - user parameter attached in userParser
     let user = req.user;
     let result = yield (0, db_1.insertUser)(user);
     res.status(201).send("User successfully signed up");
+}));
+exports.userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // @ts-expect-error - user parameter attached in userParser
+    let user = (0, user_1.isValidForLogin)(req.user);
+    if (!user) {
+        return res.status(400).send("Invalid user request");
+    }
+    let dbUser = yield (0, db_1.getUser)(user);
+    if (!dbUser) {
+        return res.status(404).send("This user does not exist");
+    }
+    let hashedUser = yield (0, db_1.hashPassword)(user);
+    if (hashedUser.password === dbUser.password) {
+        res.status(200).send("Successfully logged in");
+    }
+    else {
+        res.status(400).send("Wrong credentials");
+    }
 }));
 exports.userRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //@ts-expect-error - user parameter attached in userParser

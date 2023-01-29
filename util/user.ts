@@ -22,3 +22,12 @@ export const isValidForSignup = (user: Object): User | null =>{
         return null;
     }
 }
+
+export const isValidForLogin = (user: Object): User | null => {
+    if (user.hasOwnProperty("email") && user.hasOwnProperty("password")) {
+        let userObject = user as User;
+        return userObject.email === "" ? null : userObject;
+    } else {
+        return null;
+    }
+}

@@ -6,7 +6,7 @@
  * Object attached to the request
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isValidForSignup = void 0;
+exports.isValidForLogin = exports.isValidForSignup = void 0;
 const isValidForSignup = (user) => {
     if (user.hasOwnProperty("email") &&
         user.hasOwnProperty("nickname") &&
@@ -26,3 +26,13 @@ const isValidForSignup = (user) => {
     }
 };
 exports.isValidForSignup = isValidForSignup;
+const isValidForLogin = (user) => {
+    if (user.hasOwnProperty("email") && user.hasOwnProperty("password")) {
+        let userObject = user;
+        return userObject.email === "" ? null : userObject;
+    }
+    else {
+        return null;
+    }
+};
+exports.isValidForLogin = isValidForLogin;

@@ -55,7 +55,7 @@ export async function insertUser(user: User = testUser) {
  * 
  * */ 
 
-async function hashPassword(user: User): Promise<User> {
+export async function hashPassword(user: User): Promise<User> {
   let password: string = user.password
   const salt = await bcrypt.genSalt();
   user.password = await bcrypt.hash(password, salt);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.getUser = exports.insertUser = exports.connectToDatabase = void 0;
+exports.deleteUser = exports.getUser = exports.hashPassword = exports.insertUser = exports.connectToDatabase = void 0;
 const mongodb_1 = require("mongodb");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 require('dotenv').config();
@@ -70,6 +70,7 @@ function hashPassword(user) {
         return user;
     });
 }
+exports.hashPassword = hashPassword;
 /** Checks if user with such email exists in the database
  *
  * @param user
