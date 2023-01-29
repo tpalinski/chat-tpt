@@ -36,7 +36,6 @@ const testUser: User = {
  * A User object which is to be inserted into the database
  * @throws {UserInsertionError}
  */
-
 export async function insertUser(user: User = testUser) {
 
   const db = client.db('chat-tpt')
@@ -56,7 +55,7 @@ export async function insertUser(user: User = testUser) {
  * 
  * */ 
 
-async function hashPassword(user: User): Promise<User> {
+export async function hashPassword(user: User): Promise<User> {
   let password: string = user.password
   const salt = await bcrypt.genSalt();
   user.password = await bcrypt.hash(password, salt);
@@ -64,11 +63,13 @@ async function hashPassword(user: User): Promise<User> {
 }
 
 /** Checks if user with such email exists in the database
- * and returns User object if it does
  * 
  * @param user 
  * User object to be checked
  * 
+ * @returns
+ * User if user exists, 
+ * null if no user was found
  */
 export async function getUser(user: User): Promise<User | null> {
   const db = client.db('chat-tpt')
