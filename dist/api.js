@@ -9,6 +9,7 @@ const router_1 = require("./router/router");
 const http_1 = __importDefault(require("http"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const express_session_1 = __importDefault(require("express-session"));
 const db_1 = require("./db");
 dotenv_1.default.config();
 const bodyParser = require('body-parser');
@@ -19,6 +20,7 @@ const logger = (0, morgan_1.default)('dev');
 app.use(logger);
 app.use((0, cors_1.default)());
 app.use(bodyParser.json());
+app.use((0, express_session_1.default)({ secret: process.env.SESSION_KEY }));
 const server = http_1.default.createServer(app);
 // websocket setup
 const io = require('socket.io')(server, {

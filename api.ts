@@ -4,9 +4,10 @@ import { router } from './router/router';
 import http from "http";
 import morgan from "morgan";
 import cors from "cors";
+import session from "express-session";
 import { Server } from "socket.io";
-import { connectToDatabase, insertUser } from './db';
-import { EmailExistsError } from './util/error';
+import { connectToDatabase} from './db';
+import { RoomParams } from './types/types';
 
 dotenv.config()
 
@@ -21,6 +22,7 @@ const logger = morgan('dev');
 app.use(logger);
 app.use(cors());
 app.use(bodyParser.json())
+app.use(session({secret: process.env.SESSION_KEY as string}))
 
 const server = http.createServer(app);
 

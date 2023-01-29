@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { getUser, hashPassword, insertUser } from "../db";
 import { isValidForLogin, isValidForSignup } from "../util/user";
 import bcrypt from "bcrypt";
+import { User } from "../types/types";
 
 
 export const userRouter = express();
@@ -44,8 +45,15 @@ const signupCheck = async (req: Request, res: Response, next: NextFunction) => {
 
 // Routing
 
-userRouter.use(userParser);
+userRouter.get("/me", (req: Request, res: Response) => {
+    //@ts-expect-error
+    if(req.session.user) {
+        //@ts-expect-error
+        res.status(200).send(req.session.user as User)
+    }
+})
 
+userRouter.use(userParser);
 
 userRouter.post('/signup', signupCheck, async (req: Request, res: Response) => {
     // @ts-expect-error - user parameter attached in userParser
@@ -65,6 +73,11 @@ userRouter.post('/login', async (req: Request, res: Response) => {
         return res.status(404).send("This user does not exist")
     }
     if(await bcrypt.compare(user.password, dbUser.password)) {
+        ///@ts-expect-error
+        req.session.user = {
+            email: dbUser.email,
+            nickname: dbUser.nickname
+        }
         res.status(200).send("Successfully logged in")
     } else {
         res.status(400).send("Wrong credentials")
