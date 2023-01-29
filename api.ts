@@ -5,17 +5,22 @@ import http from "http";
 import morgan from "morgan";
 import cors from "cors";
 import { Server } from "socket.io";
+import { connectToDatabase, insertUser } from './db';
+import { EmailExistsError } from './util/error';
 
 dotenv.config()
 
+const bodyParser = require('body-parser');
 const app: Express = express();
 const port = process.env.PORT || 3001;
+connectToDatabase();
 
 
 const logger = morgan('dev');
 
 app.use(logger);
 app.use(cors());
+app.use(bodyParser.json())
 
 const server = http.createServer(app);
 
