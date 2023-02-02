@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion} from 'mongodb'
 import bcrypt from "bcrypt";
 import {  EmailExistsError} from './util/error';
+import { User } from './types/types';
 require('dotenv').config();
 const password = process.env.MONGO_PASSWORD;
 const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";

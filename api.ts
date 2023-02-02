@@ -22,7 +22,11 @@ const logger = morgan('dev');
 app.use(logger);
 app.use(cors());
 app.use(bodyParser.json())
-app.use(session({secret: process.env.SESSION_KEY as string}))
+app.use(session({
+  secret: process.env.SESSION_KEY as string,
+  saveUninitialized: true,
+  resave: true
+}))
 
 const server = http.createServer(app);
 
