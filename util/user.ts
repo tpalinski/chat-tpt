@@ -6,6 +6,8 @@
  * Object attached to the request
  */
 
+import { User } from "../types/types";
+
 export const isValidForSignup = (user: Object): User | null =>{
     if (user.hasOwnProperty("email") && 
         user.hasOwnProperty("nickname") &&

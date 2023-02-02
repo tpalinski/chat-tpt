@@ -12,40 +12,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const supertest_1 = __importDefault(require("supertest"));
 const testVar_1 = require("./testVar");
-describe("GET /", () => {
-    test("Should return status: 404", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(testVar_1.baseURL).get("/");
-        expect(response.status).toBe(404);
-    }));
-});
-describe("GET /user", () => {
+const supertest_1 = __importDefault(require("supertest"));
+describe("POST /user/login", () => {
     test("Should return status 400 with no user attached", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(testVar_1.baseURL)
-            .get("/user")
+            .post("/user/login")
             .send({});
         expect(response.status).toBe(400);
     }));
-    test("Should return status 404 with user who is not in the database", () => __awaiter(void 0, void 0, void 0, function* () {
+    test("Should return status 200 with good credentials", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(testVar_1.baseURL)
-            .get("/user")
+            .post("/user/login")
+            .send({
+            email: testVar_1.validUser.email,
+            password: testVar_1.validUser.password
+        });
+        expect(response.status).toBe(200);
+    }));
+    test("Should return status 404 with non-existent user", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(testVar_1.baseURL)
+            .post("/user/login")
             .send(testVar_1.nonUser);
         expect(response.status).toBe(404);
     }));
-    test("Should return status 200 with user who is in the database", () => __awaiter(void 0, void 0, void 0, function* () {
+    test("Should return status 400 with wrong credentials", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(testVar_1.baseURL)
-            .get("/user")
-            .send(testVar_1.validUser);
-        expect(response.status).toBe(200);
-    }));
-    test("Should return information about the user", () => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield (0, supertest_1.default)(testVar_1.baseURL)
-            .get("/user")
-            .send(testVar_1.validUser);
-        expect(response.body).toEqual({
+            .post("/user/login")
+            .send({
             email: testVar_1.validUser.email,
-            nickname: testVar_1.validUser.nickname,
+            password: "clearlywrongpassword"
         });
+        expect(response.status).toBe(400);
+    }));
+    test("Should return status 400 with invalid user object", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(testVar_1.baseURL)
+            .post("/user/login")
+            .send({
+            password: "password"
+        });
+        expect(response.status).toBe(400);
     }));
 });

@@ -50,6 +50,16 @@ const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 // Routing
+exports.userRouter.get("/me", (req, res) => {
+    //@ts-expect-error
+    if (req.session.user) {
+        //@ts-expect-error
+        res.status(200).send(req.session.user);
+    }
+    else {
+        res.status(401).send("Client not logged in");
+    }
+});
 exports.userRouter.use(userParser);
 exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-expect-error - user parameter attached in userParser
@@ -68,6 +78,11 @@ exports.userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0
         return res.status(404).send("This user does not exist");
     }
     if (yield bcrypt_1.default.compare(user.password, dbUser.password)) {
+        ///@ts-expect-error
+        req.session.user = {
+            email: dbUser.email,
+            nickname: dbUser.nickname
+        };
         res.status(200).send("Successfully logged in");
     }
     else {
