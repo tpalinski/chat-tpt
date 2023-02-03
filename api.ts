@@ -3,11 +3,11 @@ import dotenv from 'dotenv'
 import { router } from './router/router';
 import http from "http";
 import morgan from "morgan";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import session from "express-session";
 import { Server } from "socket.io";
-import { connectToDatabase} from './db';
-import { RoomParams } from './types/types';
+import { connectToDatabase, insertUser} from './db';
+import { RoomParams, User } from './types/types';
 
 dotenv.config()
 
@@ -16,11 +16,15 @@ const app: Express = express();
 const port = process.env.PORT || 3001;
 connectToDatabase();
 
-
 const logger = morgan('dev');
-
 app.use(logger);
-app.use(cors());
+
+let corsOptions: CorsOptions = {
+  origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
+  optionsSuccessStatus: 200,
+  credentials: true
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.json())
 app.use(session({
   secret: process.env.SESSION_KEY as string,
@@ -33,7 +37,7 @@ const server = http.createServer(app);
 // websocket setup
 const io: Server = require('socket.io')(server, {
     cors: {
-      origin: '*',
+      origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
     }
   });
 

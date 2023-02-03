@@ -68,6 +68,7 @@ exports.userRouter.post('/signup', signupCheck, (req, res) => __awaiter(void 0, 
     res.status(201).send("User successfully signed up");
 }));
 exports.userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     // @ts-expect-error - user parameter attached in userParser
     let user = (0, user_1.isValidForLogin)(req.user);
     if (!user) {
