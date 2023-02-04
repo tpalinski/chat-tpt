@@ -21,7 +21,7 @@ const logger = morgan('dev');
 app.use(logger);
 
 let corsOptions: CorsOptions = {
-  origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
+  origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
   optionsSuccessStatus: 200,
   credentials: true
 }
