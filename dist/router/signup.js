@@ -51,6 +51,7 @@ const signupCheck = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 });
 // Routing
 exports.userRouter.get("/me", (req, res) => {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     //@ts-expect-error
     if (req.session.user) {
         //@ts-expect-error
@@ -61,6 +62,7 @@ exports.userRouter.get("/me", (req, res) => {
     }
 });
 exports.userRouter.get("/logout", (req, res) => {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     //@ts-expect-error
     if (req.session.user) {
         //@ts-expect-error
