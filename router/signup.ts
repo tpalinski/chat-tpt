@@ -46,6 +46,7 @@ const signupCheck = async (req: Request, res: Response, next: NextFunction) => {
 // Routing
 
 userRouter.get("/me", (req: Request, res: Response) => {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     //@ts-expect-error
     if(req.session.user) {
         //@ts-expect-error
@@ -56,6 +57,7 @@ userRouter.get("/me", (req: Request, res: Response) => {
 })
 
 userRouter.get("/logout", (req: Request, res: Response) => {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     //@ts-expect-error
     if(req.session.user) {
         //@ts-expect-error
