@@ -21,8 +21,8 @@ const logger = morgan('dev');
 app.use(logger);
 
 let corsOptions: CorsOptions = {
-  origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
-  optionsSuccessStatus: 201,
+  origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
+  optionsSuccessStatus: 200,
   credentials: true
 }
 app.use(cors(corsOptions));
