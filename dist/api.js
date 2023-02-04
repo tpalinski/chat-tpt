@@ -39,6 +39,7 @@ const server = http_1.default.createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
+        methods: ["GET", "POST"]
     }
 });
 // websocket logic
