@@ -55,6 +55,17 @@ userRouter.get("/me", (req: Request, res: Response) => {
     }
 })
 
+userRouter.get("/logout", (req: Request, res: Response) => {
+    //@ts-expect-error
+    if(req.session.user) {
+        //@ts-expect-error
+        delete req.session.user
+        res.status(200).send("Logged out")
+    } else {
+        res.status(401).send("Client not logged in")
+    }
+})
+
 userRouter.use(userParser);
 
 userRouter.post('/signup', signupCheck, async (req: Request, res: Response) => {
@@ -65,6 +76,7 @@ userRouter.post('/signup', signupCheck, async (req: Request, res: Response) => {
 })
 
 userRouter.post('/login', async (req: Request, res: Response) => {
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
     // @ts-expect-error - user parameter attached in userParser
     let user = isValidForLogin(req.user);
     if(!user){

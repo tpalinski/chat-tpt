@@ -3,11 +3,12 @@ import dotenv from 'dotenv'
 import { router } from './router/router';
 import http from "http";
 import morgan from "morgan";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import session from "express-session";
 import { Server } from "socket.io";
-import { connectToDatabase} from './db';
-import { RoomParams } from './types/types';
+import { connectToDatabase, insertUser} from './db';
+import { Message, RoomParams, User } from './types/types';
+import MongoStore = require('connect-mongo');
 
 dotenv.config()
 
@@ -16,16 +17,25 @@ const app: Express = express();
 const port = process.env.PORT || 3001;
 connectToDatabase();
 
-
 const logger = morgan('dev');
-
 app.use(logger);
-app.use(cors());
+
+let corsOptions: CorsOptions = {
+  origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
+  optionsSuccessStatus: 200,
+  credentials: true
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.json())
+
+const password = process.env.MONGO_PASSWORD;
+const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
+
 app.use(session({
   secret: process.env.SESSION_KEY as string,
   saveUninitialized: true,
-  resave: true
+  resave: true,
+  store: MongoStore.create({mongoUrl: uri})
 }))
 
 const server = http.createServer(app);
@@ -33,7 +43,7 @@ const server = http.createServer(app);
 // websocket setup
 const io: Server = require('socket.io')(server, {
     cors: {
-      origin: '*',
+      origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
     }
   });
 
@@ -47,7 +57,7 @@ io.on('connection', (socket) => {
       })
     });
 
-    socket.on("send-message", (message: string) => {
+    socket.on("send-message", (message: Message) => {
       let room = [...socket.rooms][1]; // The name of the first and only room that the user joins
       io.to(room).emit("message", message)
     })
