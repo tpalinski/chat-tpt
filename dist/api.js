@@ -20,7 +20,7 @@ const port = process.env.PORT || 3001;
 const logger = (0, morgan_1.default)('dev');
 app.use(logger);
 let corsOptions = {
-    origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
+    origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
     optionsSuccessStatus: 200,
     credentials: true
 };
@@ -38,8 +38,7 @@ const server = http_1.default.createServer(app);
 // websocket setup
 const io = require('socket.io')(server, {
     cors: {
-        origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
-        methods: ["GET", "POST"],
+        origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
         credentials: true,
         optionsSuccessStatus: 201,
     }

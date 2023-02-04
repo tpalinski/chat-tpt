@@ -21,7 +21,7 @@ const logger = morgan('dev');
 app.use(logger);
 
 let corsOptions: CorsOptions = {
-  origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
+  origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
   optionsSuccessStatus: 200,
   credentials: true
 }
@@ -43,8 +43,7 @@ const server = http.createServer(app);
 // websocket setup
 const io: Server = require('socket.io')(server, {
     cors: {
-      origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
-      methods: ["GET", "POST"],
+      origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
       credentials: true,
       optionsSuccessStatus: 201,
     }
