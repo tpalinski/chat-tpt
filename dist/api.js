@@ -11,6 +11,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const express_session_1 = __importDefault(require("express-session"));
 const db_1 = require("./db");
+const MongoStore = require("connect-mongo");
 dotenv_1.default.config();
 const bodyParser = require('body-parser');
 const app = (0, express_1.default)();
@@ -25,10 +26,13 @@ let corsOptions = {
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(bodyParser.json());
+const password = process.env.MONGO_PASSWORD;
+const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_KEY,
     saveUninitialized: true,
-    resave: true
+    resave: true,
+    store: MongoStore.create({ mongoUrl: uri })
 }));
 const server = http_1.default.createServer(app);
 // websocket setup

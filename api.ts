@@ -8,6 +8,7 @@ import session from "express-session";
 import { Server } from "socket.io";
 import { connectToDatabase, insertUser} from './db';
 import { Message, RoomParams, User } from './types/types';
+import MongoStore = require('connect-mongo');
 
 dotenv.config()
 
@@ -26,10 +27,15 @@ let corsOptions: CorsOptions = {
 }
 app.use(cors(corsOptions));
 app.use(bodyParser.json())
+
+const password = process.env.MONGO_PASSWORD;
+const uri = "mongodb+srv://admin:" + password + "@cluster0.ipgs6c8.mongodb.net/?retryWrites=true&w=majority";
+
 app.use(session({
   secret: process.env.SESSION_KEY as string,
   saveUninitialized: true,
-  resave: true
+  resave: true,
+  store: MongoStore.create({mongoUrl: uri})
 }))
 
 const server = http.createServer(app);
