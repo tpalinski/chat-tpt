@@ -7,7 +7,7 @@ import cors, { CorsOptions } from "cors";
 import session from "express-session";
 import { Server } from "socket.io";
 import { connectToDatabase, insertUser} from './db';
-import { RoomParams, User } from './types/types';
+import { Message, RoomParams, User } from './types/types';
 
 dotenv.config()
 
@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
       })
     });
 
-    socket.on("send-message", (message: string) => {
+    socket.on("send-message", (message: Message) => {
       let room = [...socket.rooms][1]; // The name of the first and only room that the user joins
       io.to(room).emit("message", message)
     })
