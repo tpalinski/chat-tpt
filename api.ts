@@ -44,7 +44,9 @@ const server = http.createServer(app);
 const io: Server = require('socket.io')(server, {
     cors: {
       origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
-      methods: ["GET", "POST"]
+      methods: ["GET", "POST"],
+      credentials: true,
+      optionsSuccessStatus: 201,
     }
   });
 
