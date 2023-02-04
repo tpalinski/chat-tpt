@@ -22,7 +22,7 @@ app.use(logger);
 
 let corsOptions: CorsOptions = {
   origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 201,
   credentials: true
 }
 app.use(cors(corsOptions));
