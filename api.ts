@@ -43,7 +43,7 @@ const server = http.createServer(app);
 // websocket setup
 const io: Server = require('socket.io')(server, {
     cors: {
-      origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
+      origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
     }
   });
 

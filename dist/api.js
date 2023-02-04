@@ -21,7 +21,7 @@ const logger = (0, morgan_1.default)('dev');
 app.use(logger);
 let corsOptions = {
     origin: ['https://tpalinski.github.io', 'http://localhost:3000'],
-    optionsSuccessStatus: 200,
+    optionsSuccessStatus: 201,
     credentials: true
 };
 app.use((0, cors_1.default)(corsOptions));
@@ -38,7 +38,7 @@ const server = http_1.default.createServer(app);
 // websocket setup
 const io = require('socket.io')(server, {
     cors: {
-        origin: ['https://tpalinski.github.io/chat-tpt-front/', 'http://localhost:3000'],
+        origin: ['https://tpalinski.github.io/', 'http://localhost:3000'],
     }
 });
 // websocket logic
